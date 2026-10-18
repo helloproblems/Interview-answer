@@ -1,0 +1,75 @@
+{
+  "samples": 129,
+  "model": "without_region__logistic_regression",
+  "classification": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.8449612403100775,
+    "fault_precision": 0.8548387096774194,
+    "fault_recall": 0.9814814814814815,
+    "fault_recall_95pct_wilson": [
+      0.9349809519962323,
+      0.9949067756552313
+    ],
+    "false_alarm_recall": 0.14285714285714285,
+    "roc_auc": 0.8373015873015873,
+    "false_alarm_average_precision": 0.4750776547284918,
+    "brier_score": 0.11413024746788271,
+    "log_loss": 0.36470090869256966,
+    "confusion_matrix_0_1": [
+      [
+        3,
+        18
+      ],
+      [
+        2,
+        106
+      ]
+    ]
+  },
+  "review": {
+    "tickets": 129,
+    "reviews": 5,
+    "review_share": 0.03875968992248062,
+    "false_alarms_reviewed": 3,
+    "real_faults_reviewed": 2,
+    "unknown_outcomes_reviewed": 0,
+    "false_alarm_capture": 0.14285714285714285,
+    "faults_outside_review_rate": 0.9814814814814815,
+    "faults_outside_review_95pct_wilson": [
+      0.9349809519962323,
+      0.9949067756552313
+    ],
+    "review_hours": 60,
+    "potential_net_hours_at_100pct_success": 300,
+    "break_even_review_success": 0.16666666666666666
+  },
+  "review_threshold": 0.29846147219051666,
+  "classification_threshold": 0.29846147219051666,
+  "evaluation_role": "test",
+  "model_sha256": "14fd7340b2a557395da7575991b68d94a204e6120ff501d2db6ee0f7b06a19b2",
+  "baseline_accuracy": 0.8372093023255814,
+  "accuracy_difference_percentage_points": 0.7751937984496027,
+  "missed_real_faults": 2,
+  "identified_false_alarms": 3,
+  "false_alarms_not_identified": 18,
+  "correct_real_faults": 106,
+  "predicted_no_fault_precision": 0.6,
+  "random_ranking_false_alarm_ap": 0.16279069767441862,
+  "error_count": 20,
+  "interpretation": "零漏判目标未达到：108 条真实故障中仍漏判 2 条",
+  "review_reference_floor": 1.0,
+  "meets_review_reference_floor": false,
+  "user_accepted": null,
+  "previous_model_error_counts": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697,
+    "true_negatives": 5,
+    "true_positives": 106
+  },
+  "observed_zero_errors": false,
+  "optimization_goal": "zero_false_negatives"
+}

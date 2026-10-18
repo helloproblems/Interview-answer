@@ -1,0 +1,168 @@
+{
+  "model": "without_region__logistic_regression",
+  "classification_threshold": 0.29846147219051666,
+  "review_threshold": 0.29846147219051666,
+  "objective": "Maximize true negatives subject to zero observed training OOF false negatives",
+  "tie_breakers": [
+    "more check days with true negatives",
+    "fewer feature columns",
+    "lower Brier score",
+    "model name"
+  ],
+  "threshold_rule": "one float step below minimum observed real-fault score; equality is a fault",
+  "training_rows": 498,
+  "estimator_fit_rows": 393,
+  "calibration_rows": 105,
+  "training_oof_rows": 290,
+  "training_oof_faults": 253,
+  "training_oof_false_alarms": 37,
+  "candidate_models": 33,
+  "daily_folds": 2,
+  "selected_training_oof": {
+    "feature_set": "without_region",
+    "algorithm": "logistic_regression",
+    "selected_features": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "rated_power_kw",
+      "device_type"
+    ],
+    "feature_count": 4,
+    "excluded_features": [
+      "region"
+    ],
+    "model": "without_region__logistic_regression",
+    "classification_threshold": 0.29846147219051666,
+    "days_with_true_negatives": 1,
+    "brier_score": 0.09225856719872932,
+    "false_positives": 34,
+    "false_negatives": 0,
+    "errors": 34,
+    "accuracy": 0.8827586206896552,
+    "true_negatives": 3,
+    "true_positives": 253
+  },
+  "calibration_day": "2026-09-04",
+  "calibration_threshold": 0.46638079912874614,
+  "calibration_results": {
+    "false_positives": 10,
+    "false_negatives": 0,
+    "errors": 10,
+    "accuracy": 0.9047619047619048,
+    "true_negatives": 0,
+    "true_positives": 95
+  },
+  "test_used_for_selection": false,
+  "final_validation_evaluated": false,
+  "random_seed": 42,
+  "train_quality": {
+    "input_sha256": "bf82156da6a911e5772fa6422228def0fb3bc0dd252869bf2b0342c2b355c413",
+    "raw_rows": 498,
+    "exact_duplicates_removed": 0,
+    "unique_tickets": 498,
+    "labeled_tickets": 498,
+    "confirmed_faults": 442,
+    "confirmed_false_alarms": 56,
+    "unreturned_labels": 0,
+    "zero_health_scores": 14,
+    "zero_rated_power": 0,
+    "first_business_day": "2026-09-01",
+    "last_business_day": "2026-09-04"
+  },
+  "feature_set": "without_region",
+  "selected_features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "device_type"
+  ],
+  "excluded_features": [
+    "region"
+  ],
+  "feature_count": 4,
+  "algorithm": "logistic_regression",
+  "model_sha256": "14fd7340b2a557395da7575991b68d94a204e6120ff501d2db6ee0f7b06a19b2",
+  "feature_sets_compared": 11,
+  "algorithms_compared": [
+    "logistic_regression",
+    "random_forest",
+    "hist_gradient_boosting"
+  ],
+  "feature_sets": {
+    "all_features": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "rated_power_kw",
+      "region",
+      "device_type"
+    ],
+    "without_telemetry_age_minutes": [
+      "reported_health_score",
+      "rated_power_kw",
+      "region",
+      "device_type"
+    ],
+    "without_reported_health_score": [
+      "telemetry_age_minutes",
+      "rated_power_kw",
+      "region",
+      "device_type"
+    ],
+    "without_rated_power_kw": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "region",
+      "device_type"
+    ],
+    "without_region": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "rated_power_kw",
+      "device_type"
+    ],
+    "without_device_type": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "rated_power_kw",
+      "region"
+    ],
+    "age_only": [
+      "telemetry_age_minutes"
+    ],
+    "age_health": [
+      "telemetry_age_minutes",
+      "reported_health_score"
+    ],
+    "age_health_device": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "device_type"
+    ],
+    "age_health_region": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "region"
+    ],
+    "numeric_only": [
+      "telemetry_age_minutes",
+      "reported_health_score",
+      "rated_power_kw"
+    ]
+  },
+  "matched_full_features_control": {
+    "path": "artifacts/feature_selection/full_features_control.joblib",
+    "model_sha256": "71b02939639b89fae6231045b5b8606975209fed2dbbb0deedd3512e81a6db87",
+    "model": "all_features__logistic_regression",
+    "classification_threshold": 0.22690425783133042,
+    "estimator_fit_rows": 393,
+    "calibration_rows": 105,
+    "calibration_results": {
+      "false_positives": 10,
+      "false_negatives": 0,
+      "errors": 10,
+      "accuracy": 0.9047619047619048,
+      "true_negatives": 0,
+      "true_positives": 95
+    }
+  }
+}

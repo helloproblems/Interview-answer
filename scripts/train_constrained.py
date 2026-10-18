@@ -130,7 +130,8 @@ def adoption_gate(comparison):
             "user_accepted": None, "future_zero_fn_guaranteed": False}
 
 
-def train_and_freeze(train_path, output_dir, artifact_dir):
+def train_and_freeze(train_path, output_dir, artifact_dir, *, candidates=None,
+                     candidate_details=None, selector=None, variant="constrained_specificity_v1"):
     training, quality = load_tickets(train_path)
     validate_training(training)
     fitting, calibration = split_training_calibration(training)
@@ -139,7 +140,9 @@ def train_and_freeze(train_path, output_dir, artifact_dir):
     covered = np.zeros(len(fitting), dtype=bool)
     for _, check in folds:
         covered[check] = True
-    candidates = build_constrained_candidates()
+    candidates = build_constrained_candidates() if candidates is None else candidates
+    candidate_details = {} if candidate_details is None else candidate_details
+    selector = select_constrained if selector is None else selector
     rows, saved_oof, fold_rows = [], {}, []
     for name, prototype in candidates.items():
         oof = np.full(len(fitting), np.nan)
@@ -155,12 +158,12 @@ def train_and_freeze(train_path, output_dir, artifact_dir):
                               "check_rows": len(check), "day": fitting.business_day.iloc[check[0]],
                               "classification_threshold": threshold, **counts})
         score = classification_metrics(y[covered], oof[covered], threshold)
-        rows.append({"model": name, "classification_threshold": threshold,
+        rows.append({**candidate_details.get(name, {}), "model": name, "classification_threshold": threshold,
                      "days_with_true_negatives": int(day_hits), "brier_score": score["brier_score"],
                      **constrained_counts(y[covered], oof[covered], threshold)})
         saved_oof[name] = oof
         print(f"Constrained training CV complete: {name}", flush=True)
-    selected = select_constrained(rows)
+    selected = selector(rows)
     estimator = clone(candidates[selected["model"]]).fit(x, y)
     probability = estimator.predict_proba(make_features(calibration))[:, 1]
     calibration_threshold = strict_threshold(calibration.fault_confirmed, probability)
@@ -183,11 +186,15 @@ def train_and_freeze(train_path, output_dir, artifact_dir):
         "calibration_results": calibrated_counts, "test_used_for_selection": False,
         "final_validation_evaluated": False, "random_seed": 42, "train_quality": quality,
     }
+    for key in ["feature_set", "selected_features", "excluded_features", "feature_count", "algorithm"]:
+        if key in selected:
+            selection[key] = selected[key]
     metadata = {
         "model_name": selected["model"], "classification_threshold": threshold, "review_threshold": threshold,
-        "review_reference_floor": 1.0, "features": FEATURES, "training_input_sha256": quality["input_sha256"],
+        "review_reference_floor": 1.0, "features": selection.get("selected_features", FEATURES),
+        "input_features": FEATURES, "training_input_sha256": quality["input_sha256"],
         "sklearn_version": sklearn.__version__, "selection_scope": "training_only_daily_folds_then_training_day_calibration",
-        "mode": "advisory_only", "variant": "constrained_specificity_v1", "optimization_goal": "zero_false_negatives",
+        "mode": "advisory_only", "variant": variant, "optimization_goal": "zero_false_negatives",
         "future_zero_fn_guaranteed": False, "automatic_dispatch_cancellation_enabled": False,
         "estimator_fit_rows": len(fitting), "calibration_rows": len(calibration),
     }
@@ -212,7 +219,8 @@ def train_and_freeze(train_path, output_dir, artifact_dir):
     return training, selection, model_path
 
 
-def evaluate_frozen(training, selection, model_path, test_path, output_dir, baseline_path):
+def evaluate_frozen(training, selection, model_path, test_path, output_dir, baseline_path,
+                    *, experiment_renderer=None):
     """Read external test only after decisions have been saved, and do not tune on it."""
     output_dir = Path(output_dir)
     if json.loads((output_dir / "selection.json").read_text(encoding="utf-8")) != selection:
@@ -223,6 +231,14 @@ def evaluate_frozen(training, selection, model_path, test_path, output_dir, base
     threshold = bundle["classification_threshold"]
     if threshold != selection["classification_threshold"]:
         raise ValueError("Frozen classification threshold does not match selection")
+    control = None
+    if control_info := selection.get("matched_full_features_control"):
+        control_path = Path(control_info["path"])
+        if hashlib.sha256(control_path.read_bytes()).hexdigest() != control_info["model_sha256"]:
+            raise ValueError("Frozen full-feature control fingerprint does not match")
+        control = joblib.load(control_path)
+        if control["classification_threshold"] != control_info["classification_threshold"]:
+            raise ValueError("Frozen full-feature control threshold does not match")
     testing, quality = load_tickets(test_path)
     validate_test(training, testing)
     probability = bundle["pipeline"].predict_proba(make_features(testing))[:, 1]
@@ -237,6 +253,18 @@ def evaluate_frozen(training, selection, model_path, test_path, output_dir, base
                   "zero_misses_observed": faults > 0 and counts["false_negatives"] == 0,
                   "nontrivial_goal_observed": faults > 0 and counts["false_negatives"] == 0 and counts["true_negatives"] > 0,
                   "future_zero_fn_guaranteed": False, "final_validation_evaluated": False}
+    if control is not None:
+        control_probability = control["pipeline"].predict_proba(make_features(testing))[:, 1]
+        control_threshold = control["classification_threshold"]
+        comparison["matched_full_features_control"] = {
+            "model_sha256": control_info["model_sha256"], "classification_threshold": control_threshold,
+            "counts": constrained_counts(testing.fault_confirmed, control_probability, control_threshold),
+            "classification": classification_metrics(testing.fault_confirmed, control_probability, control_threshold),
+        }
+        control_output = predictions_frame(testing, control_probability, control_threshold, control_threshold)
+        control_output["fault_confirmed"] = testing.fault_confirmed
+        control_output["dispatch_action"] = "preserve_dispatch"
+        control_output.to_csv(output_dir / "full_features_control_predictions.csv", index=False, encoding="utf-8-sig")
     metrics = {"data_quality": quality, "model": bundle["model_name"], "model_sha256": selection["model_sha256"],
                "classification_threshold": threshold, "review_threshold": threshold, "review_reference_floor": 1.0,
                "classification": classification_metrics(testing.fault_confirmed, probability, threshold),
@@ -249,7 +277,8 @@ def evaluate_frozen(training, selection, model_path, test_path, output_dir, base
     write_json(output_dir / "metrics.json", metrics)
     write_json(output_dir / "test_comparison.json", comparison)
     write_json(output_dir / "adoption_gate.json", adoption_gate(comparison))
-    (output_dir / "experiment.md").write_text(experiment_markdown(selection, comparison), encoding="utf-8")
+    renderer = experiment_markdown if experiment_renderer is None else experiment_renderer
+    (output_dir / "experiment.md").write_text(renderer(selection, comparison), encoding="utf-8")
     summary = render_saved_report(output_dir)
     print(console_summary(summary, output_dir))
     print(json.dumps(comparison, ensure_ascii=False, indent=2))

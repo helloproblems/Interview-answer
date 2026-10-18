@@ -1,0 +1,30 @@
+{
+  "model_name": "without_region__logistic_regression",
+  "classification_threshold": 0.29846147219051666,
+  "review_threshold": 0.29846147219051666,
+  "review_reference_floor": 1.0,
+  "features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "device_type"
+  ],
+  "input_features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "region",
+    "device_type"
+  ],
+  "training_input_sha256": "bf82156da6a911e5772fa6422228def0fb3bc0dd252869bf2b0342c2b355c413",
+  "sklearn_version": "1.7.2",
+  "selection_scope": "training_only_daily_folds_then_training_day_calibration",
+  "mode": "advisory_only",
+  "variant": "feature_ablation_v1",
+  "optimization_goal": "zero_false_negatives",
+  "future_zero_fn_guaranteed": false,
+  "automatic_dispatch_cancellation_enabled": false,
+  "estimator_fit_rows": 393,
+  "calibration_rows": 105,
+  "model_sha256": "14fd7340b2a557395da7575991b68d94a204e6120ff501d2db6ee0f7b06a19b2"
+}

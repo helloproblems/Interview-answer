@@ -1,0 +1,75 @@
+{
+  "data_quality": {
+    "input_sha256": "9dba48cbbe9c7a079ad1e43fca40886b43227d19821a0c452d6bc793244376db",
+    "raw_rows": 129,
+    "exact_duplicates_removed": 0,
+    "unique_tickets": 129,
+    "labeled_tickets": 129,
+    "confirmed_faults": 108,
+    "confirmed_false_alarms": 21,
+    "unreturned_labels": 0,
+    "zero_health_scores": 5,
+    "zero_rated_power": 0,
+    "first_business_day": "2026-09-05",
+    "last_business_day": "2026-09-05"
+  },
+  "model": "without_region__logistic_regression",
+  "model_sha256": "14fd7340b2a557395da7575991b68d94a204e6120ff501d2db6ee0f7b06a19b2",
+  "classification_threshold": 0.29846147219051666,
+  "review_threshold": 0.29846147219051666,
+  "review_reference_floor": 1.0,
+  "classification": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.8449612403100775,
+    "fault_precision": 0.8548387096774194,
+    "fault_recall": 0.9814814814814815,
+    "fault_recall_95pct_wilson": [
+      0.9349809519962323,
+      0.9949067756552313
+    ],
+    "false_alarm_recall": 0.14285714285714285,
+    "roc_auc": 0.8373015873015873,
+    "false_alarm_average_precision": 0.4750776547284918,
+    "brier_score": 0.11413024746788271,
+    "log_loss": 0.36470090869256966,
+    "confusion_matrix_0_1": [
+      [
+        3,
+        18
+      ],
+      [
+        2,
+        106
+      ]
+    ]
+  },
+  "review": {
+    "tickets": 129,
+    "reviews": 5,
+    "review_share": 0.03875968992248062,
+    "false_alarms_reviewed": 3,
+    "real_faults_reviewed": 2,
+    "unknown_outcomes_reviewed": 0,
+    "false_alarm_capture": 0.14285714285714285,
+    "faults_outside_review_rate": 0.9814814814814815,
+    "faults_outside_review_95pct_wilson": [
+      0.9349809519962323,
+      0.9949067756552313
+    ],
+    "review_hours": 60,
+    "potential_net_hours_at_100pct_success": 300,
+    "break_even_review_success": 0.16666666666666666
+  },
+  "evaluation_role": "test",
+  "optimization_goal": "zero_false_negatives",
+  "previous_model_error_counts": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697,
+    "true_negatives": 5,
+    "true_positives": 106
+  }
+}
