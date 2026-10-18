@@ -57,6 +57,25 @@ class ReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "fixed 0.5"):
             prepare_report(metrics, predictions)
 
+    def test_csv_round_trip_preserves_decisions_at_the_fault_threshold(self):
+        metrics, predictions = fixture()
+        boundary = 0.09417734788764953
+        threshold = float(np.nextafter(boundary, -np.inf))
+        probability = np.where(predictions.fault_confirmed.eq(1), boundary, 0.01)
+        predictions["fault_probability"] = probability
+        predictions["predicted_fault_confirmed"] = (probability >= threshold).astype(int)
+        predictions["recommendation"] = np.where(probability < threshold, "remote_review", "normal_dispatch")
+        metrics.update({"classification_threshold": threshold, "review_threshold": threshold,
+                        "classification": classification_metrics(predictions.fault_confirmed, probability, threshold),
+                        "review": review_metrics(predictions.fault_confirmed, probability < threshold)})
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            (output / "metrics.json").write_text(json.dumps(metrics), encoding="utf-8")
+            predictions.to_csv(output / "predictions.csv", index=False)
+            summary = render_saved_report(output)
+            self.assertEqual(summary["missed_real_faults"], 0)
+            self.assertEqual(summary["identified_false_alarms"], 2)
+
     def test_render_escapes_input_and_preserves_original_evidence(self):
         metrics, predictions = fixture()
         with tempfile.TemporaryDirectory(prefix="inspection-report-test-") as directory:

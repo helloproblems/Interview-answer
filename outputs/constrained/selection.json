@@ -1,0 +1,60 @@
+{
+  "model": "interactions_rbf_c2.0_faultweight4",
+  "classification_threshold": 0.5440041492585103,
+  "review_threshold": 0.5440041492585103,
+  "objective": "Maximize true negatives subject to zero observed training OOF false negatives",
+  "tie_breakers": [
+    "more check days with true negatives",
+    "lower Brier score",
+    "model name"
+  ],
+  "threshold_rule": "one float step below minimum observed real-fault score; equality is a fault",
+  "training_rows": 498,
+  "estimator_fit_rows": 393,
+  "calibration_rows": 105,
+  "training_oof_rows": 290,
+  "training_oof_faults": 253,
+  "training_oof_false_alarms": 37,
+  "candidate_models": 26,
+  "daily_folds": 2,
+  "selected_training_oof": {
+    "model": "interactions_rbf_c2.0_faultweight4",
+    "classification_threshold": 0.5440041492585103,
+    "days_with_true_negatives": 1,
+    "brier_score": 0.10160000731828822,
+    "false_positives": 33,
+    "false_negatives": 0,
+    "errors": 33,
+    "accuracy": 0.8862068965517241,
+    "true_negatives": 4,
+    "true_positives": 253
+  },
+  "calibration_day": "2026-09-04",
+  "calibration_threshold": 0.565610600137191,
+  "calibration_results": {
+    "false_positives": 9,
+    "false_negatives": 0,
+    "errors": 9,
+    "accuracy": 0.9142857142857143,
+    "true_negatives": 1,
+    "true_positives": 95
+  },
+  "test_used_for_selection": false,
+  "final_validation_evaluated": false,
+  "random_seed": 42,
+  "train_quality": {
+    "input_sha256": "bf82156da6a911e5772fa6422228def0fb3bc0dd252869bf2b0342c2b355c413",
+    "raw_rows": 498,
+    "exact_duplicates_removed": 0,
+    "unique_tickets": 498,
+    "labeled_tickets": 498,
+    "confirmed_faults": 442,
+    "confirmed_false_alarms": 56,
+    "unreturned_labels": 0,
+    "zero_health_scores": 14,
+    "zero_rated_power": 0,
+    "first_business_day": "2026-09-01",
+    "last_business_day": "2026-09-04"
+  },
+  "model_sha256": "0311e20a7fa062b1f93b174286cb345d6523efdc222d2ee377d7b9f224819817"
+}

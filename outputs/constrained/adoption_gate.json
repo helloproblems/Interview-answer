@@ -1,0 +1,15 @@
+{
+  "status": "rejected",
+  "reasons": [
+    "real_faults_missed",
+    "no_false_alarms_identified"
+  ],
+  "requirements": {
+    "false_negatives": 0,
+    "true_negatives_minimum": 1
+  },
+  "model_sha256": "0311e20a7fa062b1f93b174286cb345d6523efdc222d2ee377d7b9f224819817",
+  "default_model_replaced": false,
+  "user_accepted": null,
+  "future_zero_fn_guaranteed": false
+}

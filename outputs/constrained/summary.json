@@ -1,0 +1,75 @@
+{
+  "samples": 129,
+  "model": "interactions_rbf_c2.0_faultweight4",
+  "classification": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.813953488372093,
+    "fault_precision": 0.8333333333333334,
+    "fault_recall": 0.9722222222222222,
+    "fault_recall_95pct_wilson": [
+      0.9214966112497636,
+      0.9905086601007103
+    ],
+    "false_alarm_recall": 0.0,
+    "roc_auc": 0.7610229276895943,
+    "false_alarm_average_precision": 0.32928217742736143,
+    "brier_score": 0.14190914407862207,
+    "log_loss": 0.44197490881469154,
+    "confusion_matrix_0_1": [
+      [
+        0,
+        21
+      ],
+      [
+        3,
+        105
+      ]
+    ]
+  },
+  "review": {
+    "tickets": 129,
+    "reviews": 3,
+    "review_share": 0.023255813953488372,
+    "false_alarms_reviewed": 0,
+    "real_faults_reviewed": 3,
+    "unknown_outcomes_reviewed": 0,
+    "false_alarm_capture": 0.0,
+    "faults_outside_review_rate": 0.9722222222222222,
+    "faults_outside_review_95pct_wilson": [
+      0.9214966112497636,
+      0.9905086601007103
+    ],
+    "review_hours": 36,
+    "potential_net_hours_at_100pct_success": -36,
+    "break_even_review_success": null
+  },
+  "review_threshold": 0.5440041492585103,
+  "classification_threshold": 0.5440041492585103,
+  "evaluation_role": "test",
+  "model_sha256": "0311e20a7fa062b1f93b174286cb345d6523efdc222d2ee377d7b9f224819817",
+  "baseline_accuracy": 0.8372093023255814,
+  "accuracy_difference_percentage_points": -2.3255813953488413,
+  "missed_real_faults": 3,
+  "identified_false_alarms": 0,
+  "false_alarms_not_identified": 21,
+  "correct_real_faults": 105,
+  "predicted_no_fault_precision": 0.0,
+  "random_ranking_false_alarm_ap": 0.16279069767441862,
+  "error_count": 24,
+  "interpretation": "零漏判目标未达到：108 条真实故障中仍漏判 3 条",
+  "review_reference_floor": 1.0,
+  "meets_review_reference_floor": false,
+  "user_accepted": null,
+  "previous_model_error_counts": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697,
+    "true_negatives": 5,
+    "true_positives": 106
+  },
+  "observed_zero_errors": false,
+  "optimization_goal": "zero_false_negatives"
+}

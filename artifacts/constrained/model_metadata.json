@@ -1,0 +1,24 @@
+{
+  "model_name": "interactions_rbf_c2.0_faultweight4",
+  "classification_threshold": 0.5440041492585103,
+  "review_threshold": 0.5440041492585103,
+  "review_reference_floor": 1.0,
+  "features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "region",
+    "device_type"
+  ],
+  "training_input_sha256": "bf82156da6a911e5772fa6422228def0fb3bc0dd252869bf2b0342c2b355c413",
+  "sklearn_version": "1.7.2",
+  "selection_scope": "training_only_daily_folds_then_training_day_calibration",
+  "mode": "advisory_only",
+  "variant": "constrained_specificity_v1",
+  "optimization_goal": "zero_false_negatives",
+  "future_zero_fn_guaranteed": false,
+  "automatic_dispatch_cancellation_enabled": false,
+  "estimator_fit_rows": 393,
+  "calibration_rows": 105,
+  "model_sha256": "0311e20a7fa062b1f93b174286cb345d6523efdc222d2ee377d7b9f224819817"
+}

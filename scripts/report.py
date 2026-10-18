@@ -237,7 +237,8 @@ def render_saved_report(output_dir):
     if metrics.get("decision_policy") == "review_before_clear":
         from scripts.safe_policy import render_safe_report
         return render_safe_report(output_dir)
-    predictions = pd.read_csv(output_dir / "predictions.csv", dtype={"ticket_id": "string"}, encoding="utf-8-sig")
+    predictions = pd.read_csv(output_dir / "predictions.csv", dtype={"ticket_id": "string"},
+                              encoding="utf-8-sig", float_precision="round_trip")
     summary, details = prepare_report(metrics, predictions)
     (output_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     (output_dir / "summary.md").write_text(summary_markdown(summary, metrics), encoding="utf-8")

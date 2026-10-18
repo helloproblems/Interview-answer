@@ -1,0 +1,34 @@
+{
+  "test_rows": 129,
+  "faults": 108,
+  "false_alarms": 21,
+  "model_sha256": "0311e20a7fa062b1f93b174286cb345d6523efdc222d2ee377d7b9f224819817",
+  "baseline": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697,
+    "true_negatives": 5,
+    "true_positives": 106
+  },
+  "candidate": {
+    "false_positives": 21,
+    "false_negatives": 3,
+    "errors": 24,
+    "accuracy": 0.813953488372093,
+    "true_negatives": 0,
+    "true_positives": 105
+  },
+  "always_fault_baseline": {
+    "false_positives": 21,
+    "false_negatives": 0,
+    "errors": 21,
+    "accuracy": 0.8372093023255814,
+    "true_negatives": 0,
+    "true_positives": 108
+  },
+  "zero_misses_observed": false,
+  "nontrivial_goal_observed": false,
+  "future_zero_fn_guaranteed": false,
+  "final_validation_evaluated": false
+}
