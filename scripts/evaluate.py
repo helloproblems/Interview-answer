@@ -2,11 +2,13 @@
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import joblib
 
 from scripts.common import classification_metrics, load_tickets, make_features, predictions_frame, review_metrics
+from scripts.report import console_summary, render_saved_report
 
 
 def evaluate(input_path, model_path, output_dir):
@@ -24,20 +26,24 @@ def evaluate(input_path, model_path, output_dir):
     output["fault_confirmed"] = frame.fault_confirmed
     output.to_csv(output_dir / "predictions.csv", index=False, encoding="utf-8-sig")
     (output_dir / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    render_saved_report(output_dir)
     return metrics
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--model", default=Path("artifacts/fault_model.joblib"), type=Path)
     parser.add_argument("--output-dir", default=Path("outputs/user_acceptance"), type=Path)
     args = parser.parse_args()
     try:
-        metrics = evaluate(args.input, args.model, args.output_dir)
+        evaluate(args.input, args.model, args.output_dir)
     except (ValueError, FileNotFoundError) as exc:
         parser.exit(2, f"Evaluation aborted: {exc}\n")
-    print(json.dumps(metrics, indent=2))
+    summary = json.loads((args.output_dir / "summary.json").read_text(encoding="utf-8"))
+    print(console_summary(summary, args.output_dir))
 
 
 if __name__ == "__main__":

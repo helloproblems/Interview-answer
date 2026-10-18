@@ -2,12 +2,13 @@
 
 ## Project Structure & Module Organization
 
-This project trains fault_confirmed classifiers for electrical inspection tickets and exports advisory dispatch-review predictions.
+Trains fault_confirmed classifiers and exports advisory inspection predictions.
 
 - inspection_tickets.csv: original supplied data; preserve its bytes.
 - scripts/common.py: validation, features, deduplication, and business metrics.
 - scripts/train.py / scripts/predict.py: training and batch inference commands.
-- tests/test_pipeline.py: synthetic behavioral and integration fixtures.
+- scripts/evaluate.py / scripts/report.py: explicit acceptance evaluation and saved-result reporting.
+- tests/: synthetic pipeline and report checks.
 - datasets/: labeled training, test, and user acceptance validation CSVs.
 - artifacts/: trained pipeline and model metadata.
 - outputs/: reproducible evaluation tables, plots, and historical predictions.
@@ -22,20 +23,21 @@ Run from the repository root:
 uv sync --locked
 uv run --locked python -m scripts.train
 uv run --locked python -m unittest discover -s tests -v
+uv run --locked python -m scripts.report --output-dir outputs/user_acceptance
 uv run --locked python -m scripts.predict --input outputs/predict_input_example.csv --output outputs/example_predictions.csv
 uv pip check
 git diff --check
 ~~~
 
-These commands synchronize the environment, regenerate model/evaluation artifacts, run tests, demonstrate unlabeled inference, and check dependencies and whitespace. No application server or package build is required. Use uv add <package> or uv remove <package> and commit both dependency files.
+These commands synchronize dependencies, regenerate training artifacts, run tests, render existing acceptance results, demonstrate inference, and check dependencies and whitespace. Open outputs/user_acceptance/report.html locally. Use uv add <package> or uv remove <package> and commit both dependency files.
 
 ## Coding Style & Naming Conventions
 
-Use four-space Python indentation, PEP 8, snake_case functions/files, PascalCase classes, and UPPER_CASE constants. Write UTF-8 files and preserve existing Chinese documentation. Share feature logic between training and prediction. No formatter or linter is configured.
+Use four-space indentation, PEP 8, snake_case functions/files, PascalCase classes, and UPPER_CASE constants. Preserve UTF-8 Chinese documentation. Share training/inference features. No formatter or linter is configured.
 
 ## Testing Guidelines
 
-Use standard-library unittest; name files test_<feature>.py and methods test_<behavior>. Cover timezones, duplicates, missing labels, threshold boundaries, invalid inputs, serialization, and inference without labels. No coverage percentage is mandated. Synthetic fixtures verify behavior only; business claims must use supplied data.
+Use standard-library unittest; name files test_<feature>.py and methods test_<behavior>. Cover data validation, leakage boundaries, serialization, inference without labels, report consistency, and HTML escaping. No coverage percentage is mandated. Synthetic fixtures verify behavior only; business claims must use supplied data.
 
 ## Commit & Pull Request Guidelines
 
