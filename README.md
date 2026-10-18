@@ -9,3 +9,7 @@
 
 ## 怎么证明有用
     用验证数据集进行验证。
+
+```bash
+uv run --locked python -m scripts.evaluate --input datasets/validation.csv --output-dir outputs/user_acceptance
+```
