@@ -6,7 +6,7 @@ Trains fault_confirmed classifiers and exports advisory inspection predictions.
 
 - inspection_tickets.csv: original supplied data; preserve its bytes.
 - scripts/common.py: validation, features, deduplication, and business metrics.
-- scripts/train.py / scripts/predict.py: training and batch inference commands.
+- scripts/train.py / scripts/optimize.py / scripts/predict.py: baseline training, candidate search, and inference.
 - scripts/evaluate.py / scripts/report.py: explicit acceptance evaluation and saved-result reporting.
 - tests/: synthetic pipeline and report checks.
 - datasets/: labeled training, test, and user acceptance validation CSVs.
@@ -22,6 +22,7 @@ Run from the repository root:
 ~~~powershell
 uv sync --locked
 uv run --locked python -m scripts.train
+uv run --locked python -m scripts.optimize
 uv run --locked python -m unittest discover -s tests -v
 uv run --locked python -m scripts.report --output-dir outputs/user_acceptance
 uv run --locked python -m scripts.predict --input outputs/predict_input_example.csv --output outputs/example_predictions.csv
@@ -29,7 +30,7 @@ uv pip check
 git diff --check
 ~~~
 
-These commands synchronize dependencies, regenerate training artifacts, run tests, render existing acceptance results, demonstrate inference, and check dependencies and whitespace. Open outputs/user_acceptance/report.html locally. Use uv add <package> or uv remove <package> and commit both dependency files.
+Commands synchronize dependencies, train, search, test, report, predict, and check consistency. Candidate outputs live in outputs/optimization/ and artifacts/optimized/. Open report.html locally. Use uv add/remove and commit both dependency files.
 
 ## Coding Style & Naming Conventions
 
@@ -41,8 +42,8 @@ Use standard-library unittest; name files test_<feature>.py and methods test_<be
 
 ## Commit & Pull Request Guidelines
 
-History uses short subjects such as first commit, 准备工作, and 数据; no formal convention exists. Keep changes focused with descriptive subjects. PRs should state the problem, assumptions, validation commands, metric changes, and relevant issues. Include updated plots when visual results change.
+Use descriptive commit subjects; history has no formal convention. PRs should document assumptions, checks, metric changes, and relevant issues. Include updated visual results when applicable.
 
 ## Evidence & Model Boundaries
 
-Deduplicate and exclude missing labels before chronological splitting. Select models and thresholds only within training data using expanding time folds. Evaluate on test data; reserve datasets/validation.csv for the user's explicit acceptance run via scripts.evaluate. Never use final validation for fitting, selection, or automatic evaluation. Record actual AI prompts and corrections. Predictions are advisory; do not cancel dispatch. Separate estimated savings from observed outcomes. Keep credentials and .venv/ out of Git; only load trusted joblib artifacts.
+Deduplicate and exclude missing labels before chronological splitting. Select models and thresholds only within training data using expanding time folds. Freeze candidates before test evaluation; retain the default model when tests regress. Read classification thresholds from model metadata (legacy default: 0.50). Reserve datasets/validation.csv for the user's explicit acceptance run via scripts.evaluate; never fit, select, or automatically evaluate on it. Record actual AI prompts and corrections. Predictions are advisory; do not cancel dispatch. Separate estimated savings from observed outcomes. Keep credentials and .venv/ out of Git; only load trusted joblib artifacts.

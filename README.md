@@ -10,6 +10,33 @@
 
 模型和阈值只在训练集内部选择；测试集用于评估，不参与训练。训练完成后，由我使用验证数据集验收。
 
+## 本轮优化：两类错误都为零（未达到）
+
+新增 `scripts.optimize`，在训练集内比较 22 种模型配置和 17 个分类阈值，共 374 种组合。包含随机森林、Extra Trees、梯度提升、决策树、SVM、逻辑回归及样条特征。没有组合在训练内时间验证中达到两类错误都为零。
+
+先要求误报、漏判均不高于旧模型，再按总错误最少选择候选。选出逻辑回归、分类阈值 0.40；在读取测试集前保存选择和模型，之后仅评估该候选。
+
+| 范围 | 旧模型：误报 / 漏判 / 总错误 | 候选：误报 / 漏判 / 总错误 |
+| --- | --- | --- |
+| 训练内时间验证 372 条 | 43 / 5 / 48 | 36 / 4 / 40 |
+| 测试集 129 条 | 16 / 2 / 18 | 17 / 3 / 20 |
+
+**候选测试表现退步，因此保留原模型作为默认模型。** 测试准确率由 86.05% 降至 84.50%；没有继续根据测试结果调参，也没有重新评估用户验收集。训练内的改善未稳定迁移，不能称为优化成功或承诺未来零误判。
+
+运行以下命令复现，结果见 [完整试验对比](outputs/optimization/comparison.md)、[全部训练内组合](outputs/optimization/training_search.csv) 和 [冻结的选择记录](outputs/optimization/selection.json)：
+
+```bash
+uv run --locked python -m scripts.optimize
+```
+
+候选保存于 `artifacts/optimized/`，原模型仍在 `artifacts/`。如用户需要单独验收候选，使用以下命令，结果另存，避免覆盖原验收记录：
+
+```bash
+uv run --locked python -m scripts.evaluate --input datasets/validation.csv --model artifacts/optimized/fault_model.joblib --output-dir outputs/user_acceptance/optimized
+```
+
+分类阈值已贯通预测、评估与报告；旧模型未记录阈值时仍按 0.50 计算。没有通过改标签、重复样本、重分数据或把错误转成人工复核来制造零误判。
+
 ## 怎么证明有用
 
 用验证数据集进行验证。
@@ -20,9 +47,9 @@ uv run --locked python -m scripts.evaluate --input datasets/validation.csv --out
 
 命令会显示中文结果摘要，并在本地 `outputs/user_acceptance/` 下生成 `report.html`（验收页面）、`summary.md`（文字摘要）和 `validation_details.csv`（逐单明细）。运行后用浏览器打开 `report.html`，可筛选漏判、分类错误与复核工单，也可搜索工单、片区或设备。生成结果未随本次代码提交。
 
-### 当前验证结果怎么读
+### 原模型的既有验收结果
 
-以下数字来自已有的本地 `metrics.json`（原始指标）与 `predictions.csv`（逐单预测），可用上述验收命令复现。此次只改善展示，没有重新训练、推理或根据验证集调整阈值。
+以下数字来自原模型已有的本地 `metrics.json`（原始指标）与 `predictions.csv`（逐单预测），可用上述默认验收命令复现。这是优化前的验收快照，不是新候选的验收结果。
 
 | 观察项 | 结果 | 判断依据 |
 | --- | --- | --- |

@@ -94,10 +94,12 @@ def wilson_interval(successes, total):
     return [center - margin, center + margin]
 
 
-def classification_metrics(y, probability):
+def classification_metrics(y, probability, classification_threshold=0.5):
+    if not math.isfinite(classification_threshold) or not 0 <= classification_threshold <= 1:
+        raise ValueError("Classification threshold must be within [0, 1]")
     y = np.asarray(y, dtype=int)
     probability = np.asarray(probability, dtype=float)
-    prediction = (probability >= 0.5).astype(int)
+    prediction = (probability >= classification_threshold).astype(int)
     tn, fp, fn, tp = confusion_matrix(y, prediction, labels=[0, 1]).ravel()
     return {
         "n": len(y), "faults": int(y.sum()), "false_alarms": int((y == 0).sum()),
@@ -155,15 +157,17 @@ def choose_review_threshold(y, probability, recall_floor=0.95):
     return best["threshold"], rows
 
 
-def predictions_frame(frame, probability, review_threshold):
+def predictions_frame(frame, probability, review_threshold, classification_threshold=0.5):
     probability = np.asarray(probability, dtype=float)
     if not math.isfinite(review_threshold) or not 0 <= review_threshold <= 1:
         raise ValueError("Review threshold must be within [0, 1]")
+    if not math.isfinite(classification_threshold) or not 0 <= classification_threshold <= 1:
+        raise ValueError("Classification threshold must be within [0, 1]")
     if len(frame) != len(probability) or not np.isfinite(probability).all() or ((probability < 0) | (probability > 1)).any():
         raise ValueError("Invalid model probabilities")
     output = frame[INPUT_COLUMNS + ["telemetry_age_minutes"]].copy()
     output["fault_probability"] = probability
-    output["predicted_fault_confirmed"] = (probability >= 0.5).astype(int)
+    output["predicted_fault_confirmed"] = (probability >= classification_threshold).astype(int)
     output["recommendation"] = np.where(probability < review_threshold, "remote_review", "normal_dispatch")
     output["recommendation_reason"] = np.where(
         probability < review_threshold,

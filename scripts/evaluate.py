@@ -1,6 +1,7 @@
 """Explicit user-invoked acceptance evaluation; never trains or changes the model."""
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -16,13 +17,18 @@ def evaluate(input_path, model_path, output_dir):
     if frame.fault_confirmed.isna().any():
         raise ValueError("Acceptance data must have a known fault_confirmed value on every row")
     bundle = joblib.load(model_path)
+    classification_threshold = bundle.get("classification_threshold", 0.5)
     probability = bundle["pipeline"].predict_proba(make_features(frame))[:, 1]
-    metrics = {"data_quality": quality, "classification": classification_metrics(frame.fault_confirmed, probability),
+    metrics = {"data_quality": quality,
+               "classification": classification_metrics(frame.fault_confirmed, probability, classification_threshold),
                "review": review_metrics(frame.fault_confirmed, probability < bundle["review_threshold"]),
-               "review_threshold": bundle["review_threshold"], "model": bundle["model_name"]}
+               "review_threshold": bundle["review_threshold"], "model": bundle["model_name"],
+               "classification_threshold": classification_threshold, "evaluation_role": "user_acceptance",
+               "model_sha256": hashlib.sha256(Path(model_path).read_bytes()).hexdigest(),
+               "review_reference_floor": bundle.get("review_reference_floor", 0.95)}
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    output = predictions_frame(frame, probability, bundle["review_threshold"])
+    output = predictions_frame(frame, probability, bundle["review_threshold"], classification_threshold)
     output["fault_confirmed"] = frame.fault_confirmed
     output.to_csv(output_dir / "predictions.csv", index=False, encoding="utf-8-sig")
     (output_dir / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")

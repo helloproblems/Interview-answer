@@ -1,0 +1,51 @@
+{
+  "model": "logistic_regression",
+  "classification_threshold": 0.4,
+  "review_threshold": 0.5,
+  "objective": "Minimize FP + FN with both training-OOF counts no worse than original random_forest at 0.50",
+  "tie_breakers": [
+    "Brier score",
+    "distance to 0.50",
+    "model name"
+  ],
+  "training_oof_rows": 372,
+  "candidate_models": 22,
+  "thresholds_per_model": 17,
+  "random_seed": 42,
+  "reference_training_oof": {
+    "model": "random_forest",
+    "classification_threshold": 0.5,
+    "brier_score": 0.08497018637889962,
+    "false_positives": 43,
+    "false_negatives": 5,
+    "errors": 48,
+    "accuracy": 0.8709677419354839
+  },
+  "selected_training_oof": {
+    "model": "logistic_regression",
+    "classification_threshold": 0.4,
+    "brier_score": 0.08792877055365599,
+    "false_positives": 36,
+    "false_negatives": 4,
+    "errors": 40,
+    "accuracy": 0.8924731182795699
+  },
+  "zero_error_training_oof_candidates": 0,
+  "test_used_for_selection": false,
+  "final_validation_evaluated": false,
+  "train_quality": {
+    "input_sha256": "bf82156da6a911e5772fa6422228def0fb3bc0dd252869bf2b0342c2b355c413",
+    "raw_rows": 498,
+    "exact_duplicates_removed": 0,
+    "unique_tickets": 498,
+    "labeled_tickets": 498,
+    "confirmed_faults": 442,
+    "confirmed_false_alarms": 56,
+    "unreturned_labels": 0,
+    "zero_health_scores": 14,
+    "zero_rated_power": 0,
+    "first_business_day": "2026-09-01",
+    "last_business_day": "2026-09-04"
+  },
+  "warning": "Search-selected CV results are optimistic; zero observed errors would not guarantee future zero errors."
+}

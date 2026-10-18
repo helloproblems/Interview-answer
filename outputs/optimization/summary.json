@@ -1,0 +1,72 @@
+{
+  "samples": 129,
+  "model": "logistic_regression",
+  "classification": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.8449612403100775,
+    "fault_precision": 0.860655737704918,
+    "fault_recall": 0.9722222222222222,
+    "fault_recall_95pct_wilson": [
+      0.9214966112497636,
+      0.9905086601007103
+    ],
+    "false_alarm_recall": 0.19047619047619047,
+    "roc_auc": 0.8236331569664902,
+    "false_alarm_average_precision": 0.4791959618766184,
+    "brier_score": 0.11081220249657671,
+    "log_loss": 0.3606615887172501,
+    "confusion_matrix_0_1": [
+      [
+        4,
+        17
+      ],
+      [
+        3,
+        105
+      ]
+    ]
+  },
+  "review": {
+    "tickets": 129,
+    "reviews": 11,
+    "review_share": 0.08527131782945736,
+    "false_alarms_reviewed": 7,
+    "real_faults_reviewed": 4,
+    "unknown_outcomes_reviewed": 0,
+    "false_alarm_capture": 0.3333333333333333,
+    "faults_outside_review_rate": 0.962962962962963,
+    "faults_outside_review_95pct_wilson": [
+      0.9086183563893868,
+      0.9855044586600972
+    ],
+    "review_hours": 132,
+    "potential_net_hours_at_100pct_success": 708,
+    "break_even_review_success": 0.15714285714285714
+  },
+  "review_threshold": 0.5,
+  "classification_threshold": 0.4,
+  "evaluation_role": "test",
+  "model_sha256": "ab7f85f62e109f1c20c75bd49c0be3f00680f31f58a783a922f549c17497e8e3",
+  "baseline_accuracy": 0.8372093023255814,
+  "accuracy_difference_percentage_points": 0.7751937984496027,
+  "missed_real_faults": 3,
+  "identified_false_alarms": 4,
+  "false_alarms_not_identified": 17,
+  "correct_real_faults": 105,
+  "predicted_no_fault_precision": 0.5714285714285714,
+  "random_ranking_false_alarm_ap": 0.16279069767441862,
+  "error_count": 20,
+  "interpretation": "候选模型未通过旧模型对比，保留原模型；零误判目标未达到",
+  "review_reference_floor": 0.95,
+  "meets_review_reference_floor": true,
+  "user_accepted": null,
+  "previous_model_error_counts": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697
+  },
+  "observed_zero_errors": false
+}

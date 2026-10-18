@@ -1,0 +1,19 @@
+{
+  "model_name": "logistic_regression",
+  "classification_threshold": 0.4,
+  "review_threshold": 0.5,
+  "features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "region",
+    "device_type"
+  ],
+  "training_input_sha256": "bf82156da6a911e5772fa6422228def0fb3bc0dd252869bf2b0342c2b355c413",
+  "sklearn_version": "1.7.2",
+  "selection_scope": "training_only_timeseries_cv",
+  "mode": "advisory_only",
+  "variant": "optimized_v2",
+  "review_reference_floor": 0.95,
+  "model_sha256": "ab7f85f62e109f1c20c75bd49c0be3f00680f31f58a783a922f549c17497e8e3"
+}

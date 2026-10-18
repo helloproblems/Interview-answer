@@ -13,7 +13,7 @@ def predict_csv(input_path, model_path, output_path):
     bundle = joblib.load(model_path)
     frame, _ = load_tickets(input_path, require_labels=False)
     probability = bundle["pipeline"].predict_proba(make_features(frame))[:, 1]
-    output = predictions_frame(frame, probability, bundle["review_threshold"])
+    output = predictions_frame(frame, probability, bundle["review_threshold"], bundle.get("classification_threshold", 0.5))
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output.to_csv(output_path, index=False, encoding="utf-8-sig")

@@ -1,0 +1,26 @@
+{
+  "test_rows": 129,
+  "model_sha256": "ab7f85f62e109f1c20c75bd49c0be3f00680f31f58a783a922f549c17497e8e3",
+  "old_model": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697
+  },
+  "optimized_model": {
+    "false_positives": 17,
+    "false_negatives": 3,
+    "errors": 20,
+    "accuracy": 0.8449612403100775
+  },
+  "always_fault_baseline": {
+    "false_positives": 21,
+    "false_negatives": 0,
+    "errors": 21,
+    "accuracy": 0.8372093023255814
+  },
+  "classification_threshold": 0.4,
+  "final_validation_evaluated": false,
+  "zero_error_goal_reached_on_test": false,
+  "both_error_counts_not_worse_on_test": false
+}
