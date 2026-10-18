@@ -1,0 +1,6 @@
+﻿ticket_id,ticket_time,last_telemetry_time,region,device_type,reported_health_score,rated_power_kw,telemetry_age_minutes,fault_probability,predicted_fault_confirmed,recommendation,recommendation_reason
+1794,2026-09-05T07:11:00+08:00,2026-09-04T22:40:00Z,城北物流园,电容补偿柜,24,85,31.0,0.6874226738214929,1,normal_dispatch,fault_probability >= 0.60; retain current dispatch
+1070,2026-09-05T07:24:00+08:00,2026-09-04T23:24:00Z,滨江高新区,备用发电机组,25,42,0.0,0.9981490980743747,1,normal_dispatch,fault_probability >= 0.60; retain current dispatch
+1063,2026-09-05T07:27:00+08:00,2026-09-04T23:20:00Z,滨江高新区,电容补偿柜,29,64,7.0,0.9781826109891217,1,normal_dispatch,fault_probability >= 0.60; retain current dispatch
+1761,2026-09-05T07:30:00+08:00,2026-09-04T23:19:00Z,滨江高新区,母线监控仪,15,32,11.0,0.9977909824881336,1,normal_dispatch,fault_probability >= 0.60; retain current dispatch
+1110,2026-09-05T07:39:00+08:00,2026-09-04T23:39:00Z,钱塘制造基地,低压出线开关,6,21,0.0,0.9840932786530009,1,normal_dispatch,fault_probability >= 0.60; retain current dispatch

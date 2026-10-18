@@ -1,0 +1,24 @@
+{
+  "source_sha256": "061e2fb676914b7ded0e3da17b0ffa058a289ea66b5ed6ab292fdc71b49a7ed5",
+  "eligible_rows": 869,
+  "sets": {
+    "train": {
+      "rows": 498,
+      "first_day": "2026-09-01",
+      "last_day": "2026-09-04",
+      "purpose": "train"
+    },
+    "test": {
+      "rows": 129,
+      "first_day": "2026-09-05",
+      "last_day": "2026-09-05",
+      "purpose": "test"
+    },
+    "validation": {
+      "rows": 242,
+      "first_day": "2026-09-06",
+      "last_day": "2026-09-07",
+      "purpose": "user_acceptance_only"
+    }
+  }
+}

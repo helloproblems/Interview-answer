@@ -1,13 +1,15 @@
 [project]
 name = "interview-answer"
 version = "0.1.0"
-description = "Reproducible CSV analysis for a timed interview task."
+description = "Time-aware fault classification and dispatch review for electrical inspection tickets."
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
 dependencies = [
+    "joblib>=1.4,<2",
     "matplotlib==3.10.9",
     "numpy==2.2.6",
     "pandas==2.3.3",
+    "scikit-learn>=1.5,<1.8",
 ]
 
 [tool.uv]

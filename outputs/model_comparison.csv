@@ -1,0 +1,5 @@
+﻿model,mean_brier_score,folds
+prior_baseline,0.10704868028694499,3.0
+logistic_regression,0.087928770553656,3.0
+random_forest,0.08497018637889964,3.0
+hist_gradient_boosting,0.08612589419550305,3.0

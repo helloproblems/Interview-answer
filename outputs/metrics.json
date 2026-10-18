@@ -1,0 +1,156 @@
+{
+  "data_quality": {
+    "input_sha256": "061e2fb676914b7ded0e3da17b0ffa058a289ea66b5ed6ab292fdc71b49a7ed5",
+    "raw_rows": 961,
+    "exact_duplicates_removed": 46,
+    "unique_tickets": 915,
+    "labeled_tickets": 869,
+    "confirmed_faults": 770,
+    "confirmed_false_alarms": 99,
+    "unreturned_labels": 46,
+    "zero_health_scores": 29,
+    "zero_rated_power": 1,
+    "first_business_day": "2026-09-01",
+    "last_business_day": "2026-09-07"
+  },
+  "eligible_labeled_rows": 869,
+  "dataset_manifest": {
+    "source_sha256": "061e2fb676914b7ded0e3da17b0ffa058a289ea66b5ed6ab292fdc71b49a7ed5",
+    "eligible_rows": 869,
+    "sets": {
+      "train": {
+        "rows": 498,
+        "first_day": "2026-09-01",
+        "last_day": "2026-09-04",
+        "purpose": "train"
+      },
+      "test": {
+        "rows": 129,
+        "first_day": "2026-09-05",
+        "last_day": "2026-09-05",
+        "purpose": "test"
+      },
+      "validation": {
+        "rows": 242,
+        "first_day": "2026-09-06",
+        "last_day": "2026-09-07",
+        "purpose": "user_acceptance_only"
+      }
+    }
+  },
+  "selection": {
+    "model": "random_forest",
+    "criterion": "lowest mean Brier score in 3 expanding training-only folds",
+    "classification_threshold": 0.5,
+    "review_threshold": 0.6,
+    "training_oof_rows": 372,
+    "training_oof_fault_retention_floor": 0.95,
+    "test_start": "2026-09-05",
+    "validation_start": "2026-09-06",
+    "random_seed": 42,
+    "final_validation_evaluated": false
+  },
+  "training_cross_validation": {
+    "prior_baseline": {
+      "mean_brier_score": 0.10704868028694499,
+      "folds": 3
+    },
+    "logistic_regression": {
+      "mean_brier_score": 0.087928770553656,
+      "folds": 3
+    },
+    "random_forest": {
+      "mean_brier_score": 0.08497018637889964,
+      "folds": 3
+    },
+    "hist_gradient_boosting": {
+      "mean_brier_score": 0.08612589419550305,
+      "folds": 3
+    }
+  },
+  "test_selected_model": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.8604651162790697,
+    "fault_precision": 0.8688524590163934,
+    "fault_recall": 0.9814814814814815,
+    "fault_recall_95pct_wilson": [
+      0.9349809519962323,
+      0.9949067756552313
+    ],
+    "false_alarm_recall": 0.23809523809523808,
+    "roc_auc": 0.8774250440917107,
+    "false_alarm_average_precision": 0.5700759617506139,
+    "brier_score": 0.09654390480443387,
+    "log_loss": 0.3046817563636293,
+    "confusion_matrix_0_1": [
+      [
+        5,
+        16
+      ],
+      [
+        2,
+        106
+      ]
+    ]
+  },
+  "test_prior_baseline": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.8372093023255814,
+    "fault_precision": 0.8372093023255814,
+    "fault_recall": 1.0,
+    "fault_recall_95pct_wilson": [
+      0.9656526402534428,
+      0.9999999999999999
+    ],
+    "false_alarm_recall": 0.0,
+    "roc_auc": 0.5,
+    "false_alarm_average_precision": 0.16279069767441862,
+    "brier_score": 0.13882409248462985,
+    "log_loss": 0.45560897028178843,
+    "confusion_matrix_0_1": [
+      [
+        0,
+        21
+      ],
+      [
+        0,
+        108
+      ]
+    ]
+  },
+  "test_review_policy": {
+    "policy": "selected_model",
+    "tickets": 129,
+    "reviews": 16,
+    "review_share": 0.12403100775193798,
+    "false_alarms_reviewed": 9,
+    "real_faults_reviewed": 7,
+    "unknown_outcomes_reviewed": 0,
+    "false_alarm_capture": 0.42857142857142855,
+    "faults_outside_review_rate": 0.9351851851851852,
+    "faults_outside_review_95pct_wilson": [
+      0.8722236366714627,
+      0.9682518094750524
+    ],
+    "review_hours": 192,
+    "potential_net_hours_at_100pct_success": 888,
+    "break_even_review_success": 0.17777777777777778
+  },
+  "cost_assumptions": {
+    "false_trip_hours": 120,
+    "review_hours": 12,
+    "review_success_observed": false,
+    "fault_delay_cost_observed": false
+  },
+  "limitations": [
+    "Only labeled unique tickets are eligible; missing labels are not converted to zero.",
+    "The final validation file is exported for the user and never scored in this training workflow.",
+    "An earlier project version inspected the final period; this is not a never-seen blind holdout.",
+    "Only one week of data, missing device identity and fault severity; future accuracy is not guaranteed.",
+    "Model probabilities are not independently calibrated; recommendations do not cancel dispatch."
+  ]
+}

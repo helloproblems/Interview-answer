@@ -1,0 +1,17 @@
+{
+  "review_threshold": 0.6,
+  "features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "region",
+    "device_type"
+  ],
+  "model_name": "random_forest",
+  "training_input_sha256": "061e2fb676914b7ded0e3da17b0ffa058a289ea66b5ed6ab292fdc71b49a7ed5",
+  "sklearn_version": "1.7.2",
+  "test_start": "2026-09-05",
+  "validation_start": "2026-09-06",
+  "selection_scope": "training_only_timeseries_cv",
+  "mode": "advisory_only"
+}
