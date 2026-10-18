@@ -1,0 +1,26 @@
+{
+  "test_rows": 129,
+  "faults": 108,
+  "false_alarms": 21,
+  "old_model": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697
+  },
+  "high_recall_model": {
+    "false_positives": 21,
+    "false_negatives": 1,
+    "errors": 22,
+    "accuracy": 0.8294573643410853
+  },
+  "model_sha256": "f3aad80f292929d16e362fe3350988e34a0d10f5b695d388d0c9d1ea86d897a5",
+  "baseline_model_sha256": "0251fce1c8190a86420dbf9c1d1c519fbf80360b09b53898db61ce78533de7e5",
+  "classification_threshold": 0.21,
+  "final_validation_evaluated": false,
+  "zero_false_negatives_observed": false,
+  "all_predicted_fault": false,
+  "predicted_no_fault_count": 1,
+  "future_zero_fn_guaranteed": false,
+  "zero_fn_rate_one_sided_95pct_upper": null
+}

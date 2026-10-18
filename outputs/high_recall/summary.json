@@ -1,0 +1,73 @@
+{
+  "samples": 129,
+  "model": "logistic_regression",
+  "classification": {
+    "n": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "accuracy": 0.8294573643410853,
+    "fault_precision": 0.8359375,
+    "fault_recall": 0.9907407407407407,
+    "fault_recall_95pct_wilson": [
+      0.9494065448063366,
+      0.9983636391461163
+    ],
+    "false_alarm_recall": 0.0,
+    "roc_auc": 0.8170194003527338,
+    "false_alarm_average_precision": 0.46549764300528185,
+    "brier_score": 0.11266851114771814,
+    "log_loss": 0.3666909824837105,
+    "confusion_matrix_0_1": [
+      [
+        0,
+        21
+      ],
+      [
+        1,
+        107
+      ]
+    ]
+  },
+  "review": {
+    "tickets": 129,
+    "reviews": 1,
+    "review_share": 0.007751937984496124,
+    "false_alarms_reviewed": 0,
+    "real_faults_reviewed": 1,
+    "unknown_outcomes_reviewed": 0,
+    "false_alarm_capture": 0.0,
+    "faults_outside_review_rate": 0.9907407407407407,
+    "faults_outside_review_95pct_wilson": [
+      0.9494065448063366,
+      0.9983636391461163
+    ],
+    "review_hours": 12,
+    "potential_net_hours_at_100pct_success": -12,
+    "break_even_review_success": null
+  },
+  "review_threshold": 0.21,
+  "classification_threshold": 0.21,
+  "evaluation_role": "test",
+  "model_sha256": "f3aad80f292929d16e362fe3350988e34a0d10f5b695d388d0c9d1ea86d897a5",
+  "baseline_accuracy": 0.8372093023255814,
+  "accuracy_difference_percentage_points": -0.7751937984496138,
+  "missed_real_faults": 1,
+  "identified_false_alarms": 0,
+  "false_alarms_not_identified": 21,
+  "correct_real_faults": 107,
+  "predicted_no_fault_precision": 0.0,
+  "random_ranking_false_alarm_ap": 0.16279069767441862,
+  "error_count": 22,
+  "interpretation": "零漏判目标未达到：108 条真实故障中仍漏判 1 条",
+  "review_reference_floor": 1.0,
+  "meets_review_reference_floor": false,
+  "user_accepted": null,
+  "previous_model_error_counts": {
+    "false_positives": 16,
+    "false_negatives": 2,
+    "errors": 18,
+    "accuracy": 0.8604651162790697
+  },
+  "observed_zero_errors": false,
+  "optimization_goal": "zero_false_negatives"
+}

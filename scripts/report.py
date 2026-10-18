@@ -85,14 +85,25 @@ def prepare_report(metrics, predictions):
         "user_accepted": None,
         "previous_model_error_counts": metrics.get("previous_model_error_counts"),
         "observed_zero_errors": fn + fp == 0,
+        "optimization_goal": metrics.get("optimization_goal"),
     }
     previous = summary["previous_model_error_counts"]
-    if metrics.get("optimization_goal") == "zero_errors_both_classes":
+    if summary["optimization_goal"] == "zero_false_negatives":
+        if c_faults := classification["faults"]:
+            if fn:
+                summary["interpretation"] = f"零漏判目标未达到：{c_faults} 条真实故障中仍漏判 {fn} 条"
+            elif tn + fn == 0:
+                summary["interpretation"] = "本次零漏判，但全部预测为故障，未识别任何空跑"
+            else:
+                summary["interpretation"] = "本次样本真实故障零漏判；不代表未来零漏判保证"
+        else:
+            summary["interpretation"] = "样本不含真实故障，无法评价零漏判目标"
+    elif summary["optimization_goal"] == "zero_errors_both_classes":
         summary["interpretation"] = (
             "本次样本观察到零错误，仍不能保证未来零误判" if fn + fp == 0
             else "零误判目标未达到；" + summary["interpretation"]
         )
-    if previous is not None and (fp > previous["false_positives"] or fn > previous["false_negatives"]):
+    if summary["optimization_goal"] != "zero_false_negatives" and previous is not None and (fp > previous["false_positives"] or fn > previous["false_negatives"]):
         summary["interpretation"] = "候选模型未通过旧模型对比，保留原模型；零误判目标未达到"
     return summary, details
 
@@ -106,7 +117,7 @@ def summary_markdown(summary, metrics):
     title = "测试集评估摘要（非最终验收）" if summary["evaluation_role"] == "test" else "验证集验收摘要"
     return f"""# {title}
 
-**判读：{summary['interpretation']}。仍有 {summary['missed_real_faults']} 张真实故障被预测为无故障，不能据此自动撤单。**
+**判读：{summary['interpretation']}。真实故障漏判 {summary['missed_real_faults']} 张，不能据此自动撤单。**
 
 本报告用于辅助验收，不代替用户确认；没有改动模型、重新训练或调整阈值。
 
@@ -190,9 +201,10 @@ def render_html(summary, metrics, details):
     ]
     previous = summary["previous_model_error_counts"]
     if previous is not None:
+        goal_text = "优先零漏判，同时披露空跑误报代价" if summary["optimization_goal"] == "zero_false_negatives" else "两类错误目标均为 0"
         metric_rows.insert(0, ("与旧模型对比", f"误报 {fp} / 漏判 {fn}",
                               f"旧模型误报 {previous['false_positives']} / 漏判 {previous['false_negatives']}",
-                              "两类错误目标均为 0"))
+                              goal_text))
     metric_html = "".join("<tr>" + "".join(f"<td>{escape(v)}</td>" for v in row) + "</tr>" for row in metric_rows)
     reference = "达到" if summary["meets_review_reference_floor"] else "未达到"
     dataset_label = "测试集评估 · 非最终验收" if summary["evaluation_role"] == "test" else "验证集 · 用户验收参考"
@@ -222,6 +234,9 @@ document.getElementById('success').addEventListener('input', event => {{ const q
 def render_saved_report(output_dir):
     output_dir = Path(output_dir)
     metrics = json.loads((output_dir / "metrics.json").read_text(encoding="utf-8"))
+    if metrics.get("decision_policy") == "review_before_clear":
+        from scripts.safe_policy import render_safe_report
+        return render_safe_report(output_dir)
     predictions = pd.read_csv(output_dir / "predictions.csv", dtype={"ticket_id": "string"}, encoding="utf-8-sig")
     summary, details = prepare_report(metrics, predictions)
     (output_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
@@ -241,7 +256,11 @@ def main():
         summary = render_saved_report(args.output_dir)
     except (ValueError, KeyError, FileNotFoundError) as exc:
         parser.exit(2, f"Report aborted: {exc}\n")
-    print(console_summary(summary, args.output_dir))
+    if summary.get("decision_policy") == "review_before_clear":
+        from scripts.safe_policy import console_summary as safe_console_summary
+        print(safe_console_summary(summary, args.output_dir))
+    else:
+        print(console_summary(summary, args.output_dir))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+{
+  "review_threshold": 0.6,
+  "features": [
+    "telemetry_age_minutes",
+    "reported_health_score",
+    "rated_power_kw",
+    "region",
+    "device_type"
+  ],
+  "model_name": "random_forest",
+  "training_input_sha256": "061e2fb676914b7ded0e3da17b0ffa058a289ea66b5ed6ab292fdc71b49a7ed5",
+  "sklearn_version": "1.7.2",
+  "test_start": "2026-09-05",
+  "validation_start": "2026-09-06",
+  "selection_scope": "training_only_timeseries_cv",
+  "mode": "advisory_only",
+  "decision_policy": "review_before_clear",
+  "variant": "safe_dispatch_v1",
+  "classification_threshold": 0.5,
+  "underlying_model_sha256": "0251fce1c8190a86420dbf9c1d1c519fbf80360b09b53898db61ce78533de7e5",
+  "automatic_no_fault_verdicts_enabled": false,
+  "model_sha256": "1a8456646c4a2271c3493a5bdb03618a8cbf885608b80927900095d21aab68c1"
+}

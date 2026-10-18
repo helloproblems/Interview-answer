@@ -1,0 +1,82 @@
+{
+  "data_quality": {
+    "input_sha256": "9dba48cbbe9c7a079ad1e43fca40886b43227d19821a0c452d6bc793244376db",
+    "raw_rows": 129,
+    "exact_duplicates_removed": 0,
+    "unique_tickets": 129,
+    "labeled_tickets": 129,
+    "confirmed_faults": 108,
+    "confirmed_false_alarms": 21,
+    "unreturned_labels": 0,
+    "zero_health_scores": 5,
+    "zero_rated_power": 0,
+    "first_business_day": "2026-09-05",
+    "last_business_day": "2026-09-05"
+  },
+  "decision_policy": "review_before_clear",
+  "model": "random_forest",
+  "model_sha256": "1a8456646c4a2271c3493a5bdb03618a8cbf885608b80927900095d21aab68c1",
+  "evaluation_role": "test",
+  "classification_threshold": 0.5,
+  "review_threshold": 0.6,
+  "decision_metrics": {
+    "samples": 129,
+    "faults": 108,
+    "false_alarms": 21,
+    "auto_fault_predictions": 113,
+    "pending_reviews": 16,
+    "auto_no_fault_predictions": 0,
+    "auto_no_fault_errors": 0,
+    "automatic_classification_coverage": 0.875968992248062,
+    "real_faults_auto_flagged": 101,
+    "real_faults_pending_review": 7,
+    "false_alarms_auto_flagged": 12,
+    "false_alarms_pending_review": 9,
+    "full_workflow_accuracy": null,
+    "user_accepted": null,
+    "underlying_classifier": {
+      "n": 129,
+      "faults": 108,
+      "false_alarms": 21,
+      "accuracy": 0.8604651162790697,
+      "fault_precision": 0.8688524590163934,
+      "fault_recall": 0.9814814814814815,
+      "fault_recall_95pct_wilson": [
+        0.9349809519962323,
+        0.9949067756552313
+      ],
+      "false_alarm_recall": 0.23809523809523808,
+      "roc_auc": 0.8774250440917107,
+      "false_alarm_average_precision": 0.5700759617506139,
+      "brier_score": 0.09654390480443387,
+      "log_loss": 0.3046817563636293,
+      "confusion_matrix_0_1": [
+        [
+          5,
+          16
+        ],
+        [
+          2,
+          106
+        ]
+      ]
+    },
+    "review": {
+      "tickets": 129,
+      "reviews": 16,
+      "review_share": 0.12403100775193798,
+      "false_alarms_reviewed": 9,
+      "real_faults_reviewed": 7,
+      "unknown_outcomes_reviewed": 0,
+      "false_alarm_capture": 0.42857142857142855,
+      "faults_outside_review_rate": 0.9351851851851852,
+      "faults_outside_review_95pct_wilson": [
+        0.8722236366714627,
+        0.9682518094750524
+      ],
+      "review_hours": 192,
+      "potential_net_hours_at_100pct_success": 888,
+      "break_even_review_success": 0.17777777777777778
+    }
+  }
+}

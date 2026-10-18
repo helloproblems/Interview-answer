@@ -10,6 +10,7 @@ import joblib
 
 from scripts.common import classification_metrics, load_tickets, make_features, predictions_frame, review_metrics
 from scripts.report import console_summary, render_saved_report
+from scripts.safe_policy import POLICY, evaluate_safe, console_summary as safe_console_summary
 
 
 def evaluate(input_path, model_path, output_dir):
@@ -17,6 +18,8 @@ def evaluate(input_path, model_path, output_dir):
     if frame.fault_confirmed.isna().any():
         raise ValueError("Acceptance data must have a known fault_confirmed value on every row")
     bundle = joblib.load(model_path)
+    if bundle.get("decision_policy") == POLICY:
+        return evaluate_safe(frame, quality, bundle, model_path, output_dir)
     classification_threshold = bundle.get("classification_threshold", 0.5)
     probability = bundle["pipeline"].predict_proba(make_features(frame))[:, 1]
     metrics = {"data_quality": quality,
@@ -25,7 +28,8 @@ def evaluate(input_path, model_path, output_dir):
                "review_threshold": bundle["review_threshold"], "model": bundle["model_name"],
                "classification_threshold": classification_threshold, "evaluation_role": "user_acceptance",
                "model_sha256": hashlib.sha256(Path(model_path).read_bytes()).hexdigest(),
-               "review_reference_floor": bundle.get("review_reference_floor", 0.95)}
+               "review_reference_floor": bundle.get("review_reference_floor", 0.95),
+               "optimization_goal": bundle.get("optimization_goal")}
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     output = predictions_frame(frame, probability, bundle["review_threshold"], classification_threshold)
@@ -45,11 +49,14 @@ def main():
     parser.add_argument("--output-dir", default=Path("outputs/user_acceptance"), type=Path)
     args = parser.parse_args()
     try:
-        evaluate(args.input, args.model, args.output_dir)
+        metrics = evaluate(args.input, args.model, args.output_dir)
     except (ValueError, FileNotFoundError) as exc:
         parser.exit(2, f"Evaluation aborted: {exc}\n")
-    summary = json.loads((args.output_dir / "summary.json").read_text(encoding="utf-8"))
-    print(console_summary(summary, args.output_dir))
+    if metrics.get("decision_policy") == POLICY:
+        print(safe_console_summary(metrics, args.output_dir))
+    else:
+        summary = json.loads((args.output_dir / "summary.json").read_text(encoding="utf-8"))
+        print(console_summary(summary, args.output_dir))
 
 
 if __name__ == "__main__":
